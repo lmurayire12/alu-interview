@@ -1,30 +1,33 @@
 #!/usr/bin/python3
-"""alu-interview"""
+
+
+"""
+Module: rain
+"""
 
 
 def rain(walls):
-    if not walls:  # If the list is empty, return 0
+    """
+    Calculate the total trapped water between walls.
+    Args:
+    walls (list): list of non-negative integers representing wall heights
+    Returns:
+    int: total trapped water.
+    """
+
+    if len(walls) == 0:
         return 0
 
-    total_water = 0
-    # Stores the maximum wall height to the left of each position
-    left_max = [0] * len(walls)
-    # Stores the maximum wall height to the right of each position
-    right_max = [0] * len(walls)
-    # Calculate the maximum wall height to the left of each position
-    left_max[0] = walls[0]
-    for i in range(1, len(walls)):
-        left_max[i] = max(left_max[i - 1], walls[i])
+    water = 0
+    n = len(walls)
 
-    # Calculate the maximum wall height to the right of each position
-    right_max[-1] = walls[-1]
-    for i in range(len(walls) - 2, -1, -1):
-        right_max[i] = max(right_max[i + 1], walls[i])
+    for i in range(1, n - 1):
+        left_max = max(walls[:i])
+        right_max = max(walls[i + 1:])
+        current_height = walls[i]
+        min_boundary_height = min(left_max, right_max)
 
-    # Calculate the amount of water trapped at each position
-    for i in range(len(walls)):
-        water_level = min(left_max[i], right_max[i]) - walls[i]
-        if water_level > 0:
-            total_water += water_level
+        if min_boundary_height > current_height:
+            water += min_boundary_height - current_height
 
-    return total_water
+    return water
